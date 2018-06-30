@@ -46,9 +46,18 @@ module.exports = (config) => {
 
   let settings; let kraken;
 
+  let appDidMount = Promise.resolve();
+
   app.on('mount', parent => {
-    copySettingFromParent(app, parent);
-    app.use(fetchNewAppFactory(app, finalModulePath, method, config));
+    appDidMount = new Promise((resolve, reject) => {
+      copySettingFromParent(app, parent);
+      app.use(fetchNewAppFactory(app, finalModulePath, method, config));
+      resolve();
+    });
+  });
+
+  app.use((req, res, next) => {
+    appDidMount.then(next);
   });
 
   start(directory, () => {
@@ -68,13 +77,15 @@ module.exports = (config) => {
     }
 
     if (!disableAutoHotReload) {
-      // reload the module
-      app._router.stack.pop();
-      app.use(fetchNewAppFactory(app, finalModulePath, method, config));
+      appDidMount = new Promise((resolve, reject) => {
+        app._router.stack.pop();
+        app.use(fetchNewAppFactory(app, finalModulePath, method, config));
+        resolve();
+      });
     }
 
     afterHotReloadFn && afterHotReloadFn();
-  }); 
+  });
 
   return app;
 };
