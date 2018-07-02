@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "chokidar": "^2.0.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "lodash.debounce": "^4.0.8"
   }
 }
