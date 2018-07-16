@@ -1,7 +1,7 @@
 {
   "name": "hotware",
   "description": "A higher-order middleware (HOM) to make meddleware hot reload",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "index.js",
   "license": "Apache-2.0",
   "dependencies": {
